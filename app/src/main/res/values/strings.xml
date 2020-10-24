@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Tržnica</string>
+    <string name="title_activity_main">Ponuda</string>
+    <string name="prompt_name">Ime</string>
+    <string name="prompt_surname">Prezime</string>
+    <string name="prompt_town">Grad</string>
+    <string name="prompt_address">Adresa</string>
+    <string name="prompt_tel">Telefon</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Lozinka</string>
+    <string name="prompt_password2">Potvrdi lozinku</string>
+    <string name="action_sign_in">Prijava</string>
+    <string name="action_register">Registracija</string>
+    <string name="welcome">"Dobrodošao "</string>
+    <string name="invalid_username">Neispravno korisničko ime!</string>
+    <string name="invalid_password">Lozinka mora sadržavati više od 5 znakova!</string>
+    <string name="login_failed">"Neuspijela prijava"</string>
+    <string name="register_failed">"Neuspijela registracija!"</string>
+    <string name="register_success">"Uspješno ste registrirani!"</string>
+    <string name="prompt_naziv">Naziv</string>
+    <string name="prompt_cijena">Cijena</string>
+    <string name="prompt_opis">Opis</string>
+    <string name="kuna">" kn"</string>
+    <string name="del">Obriši proizvod</string>
+    <string name="register_exist">Korisnik je već registriran!</string>
+    <string name="no_data">Nema proizvoda</string>
+    <string name="korisnik">Korisnik</string>
+    <string name="save">Spremi</string>
+    <string name="cancel">Odustani</string>
+    <string name="update_success">Korisnički podaci su spremljeni!</string>
+    <string name="update_failed">Greška! Podaci nisu spremljeni!</string>
+    <string name="home_title">Registriraj svoje poljoprivredno gospodarstvo i kreni s prodajom</string>
+    <string name="izmjena">Izmjena</string>
+    <string name="novi_proizvod">Novi proizvod</string>
+
+
+</resources>
