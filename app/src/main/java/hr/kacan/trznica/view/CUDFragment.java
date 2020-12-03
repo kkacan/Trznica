@@ -1,9 +1,17 @@
 package hr.kacan.trznica.view;
 
-import hr.kacan.trznica.R;
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -22,6 +30,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -33,13 +43,13 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
+import hr.kacan.trznica.R;
 import hr.kacan.trznica.conf.Constants;
-import hr.kacan.trznica.models.Ponuda;
 import hr.kacan.trznica.models.ResponsePonuda;
 import hr.kacan.trznica.models.TipProizvoda;
 import hr.kacan.trznica.viewmodel.PonudaViewModel;
+import id.zelory.compressor.Compressor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -47,7 +57,9 @@ import okhttp3.RequestBody;
 
 public class CUDFragment extends Fragment {
 
-    static final int TAKE_PHOTO =1;
+    private static final int TAKE_PHOTO =1;
+    private static final int RESULT_LOAD_IMG = 2;
+    private static final int PERMISSION_REQUEST = 3;
 
     private String photoPath;
     private File slika;
@@ -235,13 +247,61 @@ public class CUDFragment extends Fragment {
         slikaProizvoda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                takePhoto();
+                photoDialog();
             }
         });
 
         ((MainActivity) getActivity()).setTitle(getActivity().getString(R.string.novi_proizvod));
 
         setTextChangedListener();
+
+    }
+
+    private void photoDialog(){
+
+        final AlertDialog dialog;
+
+        if (!getActivity().isFinishing()) {
+
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            View back_dialog = inflater.inflate(R.layout.photo_dialog, null);
+            alertDialog.setView(back_dialog).setCancelable(true);
+            dialog = alertDialog.create();
+            dialog.show();
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            Button btn_photo = back_dialog.findViewById(R.id.btn_photo);
+            Button btn_gallery = back_dialog.findViewById(R.id.btn_gallery);
+
+            btn_gallery.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            reqRunTimePermissions();
+                        } else {
+                            fromGallery();
+                        }
+                    } else {
+                        fromGallery();
+                    }
+
+                    dialog.cancel();
+
+                }
+            });
+            btn_photo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.cancel();
+                    takePhoto();
+                }
+            });
+
+
+        }
+
 
     }
 
@@ -294,15 +354,36 @@ public class CUDFragment extends Fragment {
 
     private void delPonuda() {
 
-        model.delPonuda(model.getPonuda()).observe(getViewLifecycleOwner(), new Observer<ResponsePonuda>() {
+        AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+        alertDialog.setTitle(getString(R.string.del_message));
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        model.delPonuda(model.getPonuda()).observe(getViewLifecycleOwner(), new Observer<ResponsePonuda>() {
 
-            @Override
-            public void onChanged(ResponsePonuda responsePonuda) {
-                back();
-                System.out.println("GOTCHA DELETE "+ responsePonuda.getResponse());
-                System.out.println("GOTCHA DELETE IMAGE "+ responsePonuda.getResponseImage());
-            }
-        });
+                            @Override
+                            public void onChanged(ResponsePonuda responsePonuda) {
+
+                                if (responsePonuda.getResponse().equals(Constants.RESPONSE_SUCCESS)){
+                                    Toast.makeText(getActivity(), getString(R.string.del_success_msg), Toast.LENGTH_LONG).show();
+                                    back();
+                                } else {
+                                    Toast.makeText(getActivity(), getString(R.string.del_fail_msg), Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+
+                        dialog.dismiss();
+                    }
+                });
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.cancel),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }
+                );
+        alertDialog.show();
 
     }
 
@@ -315,7 +396,7 @@ public class CUDFragment extends Fragment {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) == null) {
-            Toast.makeText(getActivity(), "Problem kod kreiranja slike", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), getString(R.string.slika_error_msg), Toast.LENGTH_LONG).show();
             return;
 
         }
@@ -324,12 +405,12 @@ public class CUDFragment extends Fragment {
             try {
                 slika = kreirajDatotekuSlike();
             } catch (IOException ex) {
-                Toast.makeText(getActivity(), "Problem kod kreiranja slike", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getString(R.string.slika_error_msg), Toast.LENGTH_LONG).show();
             return;
             }
 
             if (slika == null) {
-                Toast.makeText(getActivity(), "Problem kod kreiranja slike", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getString(R.string.slika_error_msg), Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -339,22 +420,80 @@ public class CUDFragment extends Fragment {
 
     }
 
+    private void fromGallery(){
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
 
-            Picasso.get()
-                    .load("file://" + photoPath)
-                    .fit()
-                    .centerCrop()
-                    .error(R.drawable.take_photo)
-                    .into(slikaProizvoda);
-            if (slika != null) {
-                model.getPonuda().setSlika(Constants.IMAGE_PREFIX + slika.getName());
+            try {
+                slika =new Compressor(getActivity())
+                        .setMaxWidth(800)
+                        .setMaxHeight(600)
+                        .setQuality(75)
+                        .setCompressFormat(Bitmap.CompressFormat.JPEG)
+                        .compressToFile(slika);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(getActivity(), getString(R.string.slika_error_msg), Toast.LENGTH_LONG).show();
             }
 
+            setImage();
 
         }
+
+        if (requestCode == RESULT_LOAD_IMG && resultCode == Activity.RESULT_OK) {
+
+            slikaURI = data.getData();
+            File tmpFile = null;
+            if (data.getData() != null) {
+                tmpFile = new File(getPath(slikaURI));
+                photoPath = tmpFile.getAbsolutePath();
+            }
+            try {
+                    slika =new Compressor(getActivity())
+                            .setMaxWidth(800)
+                            .setMaxHeight(600)
+                            .setQuality(75)
+                            .setCompressFormat(Bitmap.CompressFormat.JPEG)
+                            .compressToFile(tmpFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getActivity(), getString(R.string.slika_error_msg), Toast.LENGTH_LONG).show();
+                }
+
+            setImage();
+
+        }
+
+    }
+
+    public String getPath(Uri uri){
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
+        if (cursor == null) return null;
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String s=cursor.getString(column_index);
+        cursor.close();
+        return s;
+    }
+
+    private void setImage(){
+        Picasso.get()
+                .load("file://" + photoPath)
+                .fit()
+                .centerCrop()
+                .error(R.drawable.take_photo)
+                .into(slikaProizvoda);
+        if (slika != null) {
+            model.getPonuda().setSlika(Constants.IMAGE_PREFIX + slika.getName());
+        }
+
     }
 
     private File kreirajDatotekuSlike() throws IOException {
@@ -383,8 +522,11 @@ public class CUDFragment extends Fragment {
         model.addPonuda(image, model.getPonuda()).observe(getViewLifecycleOwner(), new Observer<ResponsePonuda>() {
             @Override
             public void onChanged(ResponsePonuda responsePonuda) {
-                System.out.println("GOTCHA IMAGE RESPONSE "+ responsePonuda.getResponseImage());
-                System.out.println("GOTCHA RESPONSE "+ responsePonuda.getResponse());
+                if (responsePonuda.getResponse().equals(Constants.RESPONSE_SUCCESS)){
+                    Toast.makeText(getActivity(), getString(R.string.add_success_msg), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getActivity(), getString(R.string.add_fail_msg), Toast.LENGTH_LONG).show();
+                }
                 Constants.TIP_PROIZVODA_ID = model.getPonuda().getTipProizvoda();
                 loadingProgressBar.setVisibility(View.GONE);
                 back();
@@ -393,10 +535,54 @@ public class CUDFragment extends Fragment {
 
         });
 
-
     }
 
+    public void reqRunTimePermissions() {
 
+        if (!getActivity().isFinishing()) {
+            int permission = ContextCompat.checkSelfPermission(getActivity(),
+                    Manifest.permission.READ_EXTERNAL_STORAGE + Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
+                    //builder.setMessage("Permission")
+                    builder.setTitle(getString(R.string.perm_write));
+
+                    builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int id) {
+                            makeRequest();
+                        }
+                    });
+
+                    androidx.appcompat.app.AlertDialog dialog = builder.create();
+                    dialog.show();
+
+                } else {
+                    makeRequest();
+                }
+            }
+        }
+    }
+
+    protected void makeRequest() {
+        requestPermissions(
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE,},
+                PERMISSION_REQUEST);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+
+        boolean permission_w;
+        if (requestCode == PERMISSION_REQUEST) {
+            permission_w = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+            if (permission_w){
+                fromGallery();
+            }
+        }
+    }
 
 
 }

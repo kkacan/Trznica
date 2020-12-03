@@ -11,12 +11,12 @@
     <string name="prompt_password2">Potvrdi lozinku</string>
     <string name="action_sign_in">Prijava</string>
     <string name="action_register">Registracija</string>
-    <string name="welcome">"Dobrodošao "</string>
+    <string name="welcome">"Dobrodošli "</string>
     <string name="invalid_username">Neispravno korisničko ime!</string>
     <string name="invalid_password">Lozinka mora sadržavati više od 5 znakova!</string>
-    <string name="login_failed">"Neuspijela prijava"</string>
-    <string name="register_failed">"Neuspijela registracija!"</string>
-    <string name="register_success">"Uspješno ste registrirani!"</string>
+    <string name="login_failed">"Neuspijela prijava!"</string>
+    <string name="register_failed">Neuspijela registracija!</string>
+    <string name="register_success">Uspješno ste registrirani!</string>
     <string name="prompt_naziv">Naziv</string>
     <string name="prompt_cijena">Cijena</string>
     <string name="prompt_opis">Opis</string>
@@ -28,10 +28,19 @@
     <string name="save">Spremi</string>
     <string name="cancel">Odustani</string>
     <string name="update_success">Korisnički podaci su spremljeni!</string>
-    <string name="update_failed">Greška! Podaci nisu spremljeni!</string>
     <string name="home_title">Registriraj svoje poljoprivredno gospodarstvo i kreni s prodajom</string>
     <string name="izmjena">Izmjena</string>
     <string name="novi_proizvod">Novi proizvod</string>
+    <string name="ok">OK</string>
+    <string name="del_message">Želite obrisati ovaj proizvod?</string>
+    <string name="del_success_msg">Proizvod je obrisan!</string>
+    <string name="del_fail_msg">Greška kod brisanja proizvoda!</string>
+    <string name="add_success_msg">Podaci o proizvodu su spremljeni</string>
+    <string name="add_fail_msg">Došlo je do greške kod spremanja podataka!</string>
+    <string name="slika_error_msg">Problem kod kreiranja slike!</string>
+    <string name="action_gallery">Galerija</string>
+    <string name="action_photo">Kamera</string>
+    <string name="perm_write">Potrebna je dozvola za korištenje galerije!</string>
 
 
 </resources>

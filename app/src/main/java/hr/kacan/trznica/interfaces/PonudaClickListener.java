@@ -1,8 +1,8 @@
 package hr.kacan.trznica.interfaces;
 
-import hr.kacan.trznica.models.Ponuda;
+import android.view.View;
 
 public interface PonudaClickListener {
 
-    void onItemClick(Ponuda ponuda);
+    void onItemClick(View view, int position);
 }

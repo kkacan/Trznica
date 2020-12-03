@@ -15,8 +15,8 @@ import hr.kacan.trznica.models.TipProizvoda;
 public class Constants {
 
     public static final String BASE_URL = "http://ec2-18-185-93-51.eu-central-1.compute.amazonaws.com/";
-    //public static final String API_BASE_URL = "http://ec2-18-185-93-51.eu-central-1.compute.amazonaws.com/api/v1/";PROMINITI U MAIN.PY APP.RUN HOST!!!
-    public static final String API_BASE_URL = "http://192.168.1.30:5000/api/v1/"; //PROMINITI U MAIN.PY APP.RUN HOST!!!
+    public static final String API_BASE_URL = "http://ec2-18-185-93-51.eu-central-1.compute.amazonaws.com/api/v1/";//PROMINITI U MAIN.PY APP.RUN HOST!!!
+    //public static final String API_BASE_URL = "http://192.168.1.30:5000/api/v1/"; //PROMINITI U MAIN.PY APP.RUN HOST!!!
     public static final String IMAGE_PREFIX = BASE_URL+ "images/";
     public static List<TipProizvoda> TIP_PROIZVODA_LIST = new ArrayList<>();
     public static Korisnik KORISNIK;

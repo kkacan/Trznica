@@ -1,6 +1,5 @@
 package hr.kacan.trznica.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,7 +18,6 @@ import hr.kacan.trznica.R;
 import hr.kacan.trznica.conf.Constants;
 import hr.kacan.trznica.models.Korisnik;
 import hr.kacan.trznica.models.ResponseKorisnik;
-import hr.kacan.trznica.view.login.LoginActivity;
 import hr.kacan.trznica.view.login.LoginFormState;
 import hr.kacan.trznica.view.login.LoginViewModel;
 import hr.kacan.trznica.view.login.LoginViewModelFactory;
@@ -131,10 +129,10 @@ public class UserActivity extends AppCompatActivity {
                                 finish();
 
                             } else if (responseKorisnik.getResponse().equals(Constants.RESPONSE_FAIL)){
-                                Toast.makeText(getApplicationContext(),  getString(R.string.update_failed), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),  getString(R.string.add_fail_msg), Toast.LENGTH_LONG).show();
                             }
                         } else {
-                            Toast.makeText(getApplicationContext(),  getString(R.string.update_failed), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(),  getString(R.string.add_fail_msg), Toast.LENGTH_LONG).show();
                         }
 
                         loadingProgressBar.setVisibility(View.INVISIBLE);
