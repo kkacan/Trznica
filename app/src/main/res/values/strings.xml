@@ -5,16 +5,19 @@
     <string name="prompt_surname">Prezime</string>
     <string name="prompt_town">Grad</string>
     <string name="prompt_address">Adresa</string>
-    <string name="prompt_tel">Telefon</string>
+    <string name="prompt_tel">Mobitel</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Lozinka</string>
     <string name="prompt_password2">Potvrdi lozinku</string>
     <string name="action_sign_in">Prijava</string>
     <string name="action_register">Registracija</string>
+    <string name="action_new_user">Novi korisnik? Registracija</string>
     <string name="welcome">"Dobrodošli "</string>
     <string name="invalid_username">Neispravno korisničko ime!</string>
     <string name="invalid_password">Lozinka mora sadržavati više od 5 znakova!</string>
     <string name="login_failed">"Neuspijela prijava!"</string>
+    <string name="login_failed_pwd">"Neispravna lozinka!"</string>
+    <string name="login_failed_usn">"Neispravan email!"</string>
     <string name="register_failed">Neuspijela registracija!</string>
     <string name="register_success">Uspješno ste registrirani!</string>
     <string name="prompt_naziv">Naziv</string>
@@ -41,6 +44,13 @@
     <string name="action_gallery">Galerija</string>
     <string name="action_photo">Kamera</string>
     <string name="perm_write">Potrebna je dozvola za korištenje galerije!</string>
-
+    <string name="btn_validate">Potvrdi</string>
+    <string name="msg_validate">Kontrolni kod poslan je SMS porukom na ovaj broj</string>
+    <string name="prompt_kod">Kod</string>
+    <string name="phone_error">Provjerite broj mobitela i pokušajte ponovno!</string>
+    <string name="code_error">Unesen je neispravan kontrolni kod!</string>
+    <string name="btn_nazovi">Nazovi</string>
+    <string name="btn_posaljimail">Pošalji email</string>
+    <string name="search">Pretraga</string>
 
 </resources>

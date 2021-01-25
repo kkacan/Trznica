@@ -89,9 +89,6 @@
                     android:textColor="@color/grey_10" />
 
 
-
-
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -104,9 +101,16 @@
                         android:id="@+id/tel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="18sp"
                         android:textColor="@android:color/white"
-                        />
+                        android:textSize="18sp" />
+                    <ImageButton
+                        android:id="@+id/kontakt"
+                        android:layout_width="?attr/actionBarSize"
+                        android:layout_height="?attr/actionBarSize"
+                        android:layout_margin="@dimen/spacing_middle"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:tint="@color/cardview_light_background"
+                        app:srcCompat="@drawable/ic_call" />
 
                     <View
                         android:layout_width="0dp"
@@ -150,23 +154,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_large"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                 <Spinner
                     android:id="@+id/tip_ponude"
+                    style="@style/Base.Widget.AppCompat.Spinner.Underlined"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    style="@style/Base.Widget.AppCompat.Spinner.Underlined"
                     android:spinnerMode="dropdown"
 
                     />
 
-
-               <!-- <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@color/grey_20" />-->
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -183,9 +181,8 @@
                         android:hint="@string/prompt_naziv"
                         android:inputType="text"
                         android:maxLines="1"
-                        android:singleLine="true"
                         android:padding="0dp"
-                         />
+                        android:singleLine="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -205,9 +202,8 @@
                         android:hint="@string/prompt_cijena"
                         android:inputType="numberDecimal"
                         android:maxLines="1"
-                        android:singleLine="true"
                         android:padding="0dp"
-                        />
+                        android:singleLine="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -226,8 +222,7 @@
                         android:layout_height="match_parent"
                         android:hint="@string/prompt_opis"
                         android:inputType="text"
-                        android:padding="0dp"
-                        />
+                        android:padding="0dp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -235,10 +230,10 @@
                     android:id="@+id/delete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/del"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/btn_rounded_accent"
+                    android:text="@string/del"
                     android:visibility="gone">
 
                 </Button>
@@ -248,22 +243,24 @@
         </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>
+
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_anchor="@id/app_bar_layout"
         app:layout_anchorGravity="bottom|right|end">
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/spacing_large"
-        android:clickable="true"
-        android:tint="@android:color/white"
-        app:backgroundTint="@color/yellow_600"
-        app:fabSize="normal"
-        app:rippleColor="@android:color/white"
-        app:srcCompat="@android:drawable/ic_menu_edit" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_large"
+            android:clickable="true"
+            android:tint="@android:color/white"
+            app:backgroundTint="@color/yellow_600"
+            app:fabSize="normal"
+            app:rippleColor="@android:color/white"
+            app:srcCompat="@android:drawable/ic_menu_edit" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabSave"
@@ -272,11 +269,11 @@
             android:layout_margin="@dimen/spacing_large"
             android:clickable="true"
             android:tint="@android:color/white"
+            android:visibility="gone"
             app:backgroundTint="@color/orange_700"
             app:fabSize="normal"
             app:rippleColor="@android:color/white"
-            app:srcCompat="@android:drawable/ic_menu_save"
-            android:visibility="gone"/>
+            app:srcCompat="@android:drawable/ic_menu_save" />
     </FrameLayout>
 
 

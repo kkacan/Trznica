@@ -1,205 +1,256 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/nested_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        android:scrollingCache="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.RegisterActivity">
 
+
+
+
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:id="@+id/ime1"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="26dp"
-        android:layout_marginEnd="24dp"
         android:layout_height="@dimen/spacing_xxlarge"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="44dp"
         android:textColorHint="@color/grey_20"
         app:boxStrokeColor="@color/grey_80"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-    <EditText
-        android:id="@+id/ime"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:hint="@string/prompt_name"
-        android:inputType="text"
-        android:selectAllOnFocus="true"
-        android:padding="0dp"
-        />
+
+        <EditText
+            android:id="@+id/ime"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/prompt_name"
+            android:inputType="text"
+            android:padding="0dp"
+            android:selectAllOnFocus="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:id="@+id/prezime1"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
         android:layout_height="@dimen/spacing_xxlarge"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="44dp"
         android:textColorHint="@color/grey_20"
         app:boxStrokeColor="@color/grey_80"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ime1">
-    <EditText
-        android:id="@+id/prezime"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:hint="@string/prompt_surname"
-        android:inputType="text"
-        android:selectAllOnFocus="true"
-        android:padding="0dp"
-    />
+
+        <EditText
+            android:id="@+id/prezime"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/prompt_surname"
+            android:inputType="text"
+            android:padding="0dp"
+            android:selectAllOnFocus="true" />
     </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:id="@+id/grad1"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
         android:layout_height="@dimen/spacing_xxlarge"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="44dp"
         android:textColorHint="@color/grey_20"
         app:boxStrokeColor="@color/grey_80"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/prezime1">
-    <EditText
-        android:id="@+id/grad"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:hint="@string/prompt_town"
-        android:inputType="text"
-        android:selectAllOnFocus="true"
-        android:padding="0dp"
-        />
+
+        <EditText
+            android:id="@+id/grad"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/prompt_town"
+            android:inputType="text"
+            android:padding="0dp"
+            android:selectAllOnFocus="true" />
     </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:id="@+id/adresa1"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
         android:layout_height="@dimen/spacing_xxlarge"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="44dp"
         android:textColorHint="@color/grey_20"
         app:boxStrokeColor="@color/grey_80"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/grad1" >
-    <EditText
-        android:id="@+id/adresa"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:hint="@string/prompt_address"
-        android:inputType="text"
-        android:selectAllOnFocus="true"
-        android:padding="0dp"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/grad1">
+
+        <EditText
+            android:id="@+id/adresa"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/prompt_address"
+            android:inputType="text"
+            android:padding="0dp"
+            android:selectAllOnFocus="true" />
     </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+    <LinearLayout
         android:id="@+id/tel1"
         android:layout_width="match_parent"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
         android:layout_height="@dimen/spacing_xxlarge"
-        android:textColorHint="@color/grey_20"
-        app:boxStrokeColor="@color/grey_80"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/adresa1" >
-    <EditText
-        android:id="@+id/tel"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:hint="@string/prompt_tel"
-        android:inputType="text"
-        android:selectAllOnFocus="true"
-        android:padding="0dp"
-    />
-    </com.google.android.material.textfield.TextInputLayout>
+        app:layout_constraintTop_toBottomOf="@+id/adresa1">
+
+        <com.rilixtech.widget.countrycodepicker.CountryCodePicker
+            android:id="@+id/ccp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:ccp_defaultNameCode="HR"
+            app:ccp_showFlag="false"
+            app:ccp_showFullName="false"
+            app:ccp_selectionDialogShowSearch="false"
+            app:ccp_enableHint="false"
+            android:padding="0dp"
+            />
+
     <com.google.android.material.textfield.TextInputLayout
+
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="@dimen/spacing_xxlarge"
+        android:textColorHint="@color/grey_20"
+        app:boxStrokeColor="@color/grey_80"
+        >
+
+
+        <EditText
+            android:id="@+id/tel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/prompt_tel"
+            android:inputType="phone"
+            android:padding="0dp"
+            android:selectAllOnFocus="true"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+        <ImageButton
+            android:id="@+id/phone_valid"
+            android:layout_width="@dimen/spacing_xmlarge"
+            android:layout_height="@dimen/spacing_xmlarge"
+            android:background="@android:color/transparent"
+            android:tint="@color/green_400"
+            app:srcCompat="@drawable/ic_check_circle"
+            android:visibility="invisible"/>
+    </LinearLayout>
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/username1"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
         android:layout_height="@dimen/spacing_xxlarge"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="44dp"
         android:textColorHint="@color/grey_20"
         app:boxStrokeColor="@color/grey_80"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tel1" >
-    <EditText
-        android:id="@+id/username"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:hint="@string/prompt_email"
-        android:inputType="textEmailAddress"
-        android:selectAllOnFocus="true"
-        android:padding="0dp"
-    />
+        app:layout_constraintTop_toBottomOf="@+id/tel1">
+
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/prompt_email"
+            android:inputType="textEmailAddress"
+            android:padding="0dp"
+            android:selectAllOnFocus="true" />
     </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:id="@+id/password1"
-        android:layout_width="match_parent"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:layout_height="@dimen/spacing_xxlarge"
-        android:textColorHint="@color/grey_20"
-        app:boxStrokeColor="@color/grey_80"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username1" >
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:hint="@string/prompt_password"
-        android:inputType="textPassword"
-        android:selectAllOnFocus="true"
-        android:padding="0dp"
-         />
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:id="@+id/password21"
         android:layout_width="match_parent"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
         android:layout_height="@dimen/spacing_xxlarge"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="44dp"
         android:textColorHint="@color/grey_20"
         app:boxStrokeColor="@color/grey_80"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password1" >
-    <EditText
-        android:id="@+id/password2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:hint="@string/prompt_password2"
-        android:imeActionLabel="@string/action_sign_in"
-        android:imeOptions="actionDone"
-        android:inputType="textPassword"
-        android:selectAllOnFocus="true"
-        android:padding="0dp"
-         />
+        app:layout_constraintTop_toBottomOf="@+id/username1">
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/prompt_password"
+            android:inputType="textPassword"
+            android:padding="0dp"
+            android:selectAllOnFocus="true" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/password21"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spacing_xxlarge"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="44dp"
+        android:textColorHint="@color/grey_20"
+        app:boxStrokeColor="@color/grey_80"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password1">
+
+        <EditText
+            android:id="@+id/password2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/prompt_password2"
+            android:imeActionLabel="@string/action_sign_in"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:padding="0dp"
+            android:selectAllOnFocus="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <Button
         android:id="@+id/register"
         android:layout_width="wrap_content"
@@ -211,12 +262,14 @@
         android:layout_marginBottom="64dp"
         android:enabled="false"
         android:text="@string/action_register"
+        android:background="@drawable/btn_rounded_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password21"
         app:layout_constraintVertical_bias="0.2" />
-    <Button
+
+   <!-- <Button
         android:id="@+id/cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -231,7 +284,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintVertical_bias="0.2" />-->
 
     <ProgressBar
         android:id="@+id/loading"
@@ -248,4 +301,8 @@
         app:layout_constraintStart_toStartOf="@+id/password1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3" />
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>

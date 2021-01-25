@@ -1,0 +1,164 @@
+{
+  "project_info": {
+    "project_number": "915251010892",
+    "firebase_url": "https://dub-radio.firebaseio.com",
+    "project_id": "dub-radio",
+    "storage_bucket": "dub-radio.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:915251010892:android:508d3b4efd93ae87c503e9",
+        "android_client_info": {
+          "package_name": "another.music.player"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "915251010892-fg0j80eeepottr8d0ujetu34tadmpuq1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcatk7rg5nSFSllRWmtIzxpK0l6w4tOFM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "915251010892-fg0j80eeepottr8d0ujetu34tadmpuq1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:915251010892:android:1d9755d1bd6f1585c503e9",
+        "android_client_info": {
+          "package_name": "com.simplecity.amp_library"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "915251010892-fg0j80eeepottr8d0ujetu34tadmpuq1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcatk7rg5nSFSllRWmtIzxpK0l6w4tOFM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "915251010892-fg0j80eeepottr8d0ujetu34tadmpuq1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:915251010892:android:292598e95612cafdc503e9",
+        "android_client_info": {
+          "package_name": "dev.dworks.apps.anexplorer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "915251010892-fg0j80eeepottr8d0ujetu34tadmpuq1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcatk7rg5nSFSllRWmtIzxpK0l6w4tOFM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "915251010892-fg0j80eeepottr8d0ujetu34tadmpuq1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:915251010892:android:d12192aca2257162",
+        "android_client_info": {
+          "package_name": "hr.dub.tuna"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "915251010892-fg0j80eeepottr8d0ujetu34tadmpuq1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcatk7rg5nSFSllRWmtIzxpK0l6w4tOFM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "915251010892-fg0j80eeepottr8d0ujetu34tadmpuq1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:915251010892:android:469b51eb4a5b5f8fc503e9",
+        "android_client_info": {
+          "package_name": "hr.kacan.trznica"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "915251010892-39j9088c5ljp1vm63m0g1u6on9scpnr6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "hr.kacan.trznica",
+            "certificate_hash": "6164a86a7c79d9d62a7127c55dcf86b70c394d34"
+          }
+        },
+        {
+          "client_id": "915251010892-fg0j80eeepottr8d0ujetu34tadmpuq1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcatk7rg5nSFSllRWmtIzxpK0l6w4tOFM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "915251010892-fg0j80eeepottr8d0ujetu34tadmpuq1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

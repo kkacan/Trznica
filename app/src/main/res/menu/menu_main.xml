@@ -3,6 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="kacan.nekretnine.view.MainActivity">
     <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search"
+        android:orderInCategory="10"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        android:title="@string/search"
+
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_user"
         android:icon="@drawable/person"
         android:orderInCategory="100"
