@@ -2,8 +2,8 @@ package hr.kacan.trznica.view.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import hr.kacan.trznica.data.LoginDataSource
 import hr.kacan.trznica.repository.LoginRepository
+import hr.kacan.trznica.viewmodel.LoginViewModel
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.

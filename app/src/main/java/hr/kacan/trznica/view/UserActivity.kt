@@ -12,8 +12,8 @@ import hr.kacan.trznica.App
 import hr.kacan.trznica.R
 import hr.kacan.trznica.conf.Constants
 import hr.kacan.trznica.models.Korisnik
-import hr.kacan.trznica.view.login.LoginViewModel
 import hr.kacan.trznica.view.login.LoginViewModelFactory
+import hr.kacan.trznica.viewmodel.LoginViewModel
 import hr.kacan.trznica.viewmodel.RegisterViewModel
 
 class UserActivity : AppCompatActivity() {

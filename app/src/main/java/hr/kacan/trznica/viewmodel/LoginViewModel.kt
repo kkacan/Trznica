@@ -1,13 +1,15 @@
-package hr.kacan.trznica.view.login
+package hr.kacan.trznica.viewmodel
 
 import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import hr.kacan.trznica.R
-import hr.kacan.trznica.data.Result
 import hr.kacan.trznica.models.Korisnik
 import hr.kacan.trznica.repository.LoginRepository
+import hr.kacan.trznica.view.login.LoginFormState
+import hr.kacan.trznica.view.login.LoginResult
+import hr.kacan.trznica.view.login.Result
 
 class LoginViewModel internal constructor(private val loginRepository: LoginRepository?) : ViewModel() {
 

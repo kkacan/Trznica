@@ -1,4 +1,4 @@
-package hr.kacan.trznica.view.login
+package hr.kacan.trznica.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,10 +13,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import hr.kacan.trznica.R
 import hr.kacan.trznica.conf.Constants
-import hr.kacan.trznica.data.Result
 import hr.kacan.trznica.models.Korisnik
-import hr.kacan.trznica.view.MenuActivity
-import hr.kacan.trznica.view.RegisterActivity
+import hr.kacan.trznica.view.login.LoggedInUser
+import hr.kacan.trznica.view.login.LoginResult
+import hr.kacan.trznica.view.login.LoginViewModelFactory
+import hr.kacan.trznica.view.login.Result
+import hr.kacan.trznica.viewmodel.LoginViewModel
 
 
 class LoginActivity : AppCompatActivity() {
@@ -75,15 +77,15 @@ class LoginActivity : AppCompatActivity() {
                         .observe(this@LoginActivity, Observer { result ->
                             if (result is Result.Success<*>) {
                                 val data = (result as Result.Success<*>).getData()
-                                loginViewModel.getLoginResult().setValue(LoginResult(LoggedInUserView(data!!.ime), 0))
+                                loginViewModel.getLoginResult().setValue(LoginResult(LoggedInUser(data!!.ime), 0))
                             } else {
                                 when ((result as Result.Error).getError()?.message.toString()) {
                                     Constants.RESPONSE_FAIL_PWD ->
-                                        loginViewModel.getLoginResult().setValue(LoginResult(LoggedInUserView(""), R.string.login_failed_pwd))
+                                        loginViewModel.getLoginResult().setValue(LoginResult(LoggedInUser(""), R.string.login_failed_pwd))
                                     Constants.RESPONSE_FAIL_USN ->
-                                        loginViewModel.getLoginResult().setValue(LoginResult(LoggedInUserView(""), R.string.login_failed_usn))
+                                        loginViewModel.getLoginResult().setValue(LoginResult(LoggedInUser(""), R.string.login_failed_usn))
                                     else ->
-                                        loginViewModel.getLoginResult().setValue(LoginResult(LoggedInUserView(""), R.string.login_failed))
+                                        loginViewModel.getLoginResult().setValue(LoginResult(LoggedInUser(""), R.string.login_failed))
                                 }
                             }
                         })
@@ -98,16 +100,16 @@ class LoginActivity : AppCompatActivity() {
                     .observe(this@LoginActivity, Observer { result ->
                         if (result is Result.Success<*>) {
                             val data = (result as Result.Success<*>).getData()
-                            loginViewModel.getLoginResult().value = LoginResult(LoggedInUserView(data!!.ime), 0)
+                            loginViewModel.getLoginResult().value = LoginResult(LoggedInUser(data!!.ime), 0)
                             saveUserData(data)
                         } else {
                             when ((result as Result.Error).getError()?.message.toString()) {
                                 Constants.RESPONSE_FAIL_PWD ->
-                                    loginViewModel.getLoginResult().setValue(LoginResult(LoggedInUserView(""), R.string.login_failed_pwd))
+                                    loginViewModel.getLoginResult().setValue(LoginResult(LoggedInUser(""), R.string.login_failed_pwd))
                                 Constants.RESPONSE_FAIL_USN ->
-                                    loginViewModel.getLoginResult().setValue(LoginResult(LoggedInUserView(""), R.string.login_failed_usn))
+                                    loginViewModel.getLoginResult().setValue(LoginResult(LoggedInUser(""), R.string.login_failed_usn))
                                 else ->
-                                    loginViewModel.getLoginResult().setValue(LoginResult(LoggedInUserView(""), R.string.login_failed))
+                                    loginViewModel.getLoginResult().setValue(LoginResult(LoggedInUser(""), R.string.login_failed))
                             }
                         }
                     })
@@ -120,10 +122,8 @@ class LoginActivity : AppCompatActivity() {
         getUserData()
     }
 
-    private fun updateUiWithUser(model: LoggedInUserView?) {
+    private fun updateUiWithUser(model: LoggedInUser?) {
         val welcome = getString(R.string.welcome) + (model?.displayName)
-
-        // TODO : initiate successful logged in experience
         Toast.makeText(applicationContext, welcome, Toast.LENGTH_LONG).show()
         val intent = Intent(this@LoginActivity, MenuActivity::class.java)
         startActivity(intent)

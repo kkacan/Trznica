@@ -24,9 +24,8 @@ import com.rilixtech.widget.countrycodepicker.CountryCodePicker
 import hr.kacan.trznica.R
 import hr.kacan.trznica.conf.Constants
 import hr.kacan.trznica.models.Korisnik
-import hr.kacan.trznica.view.login.LoginActivity
-import hr.kacan.trznica.view.login.LoginViewModel
 import hr.kacan.trznica.view.login.LoginViewModelFactory
+import hr.kacan.trznica.viewmodel.LoginViewModel
 import hr.kacan.trznica.viewmodel.RegisterViewModel
 import java.util.*
 import java.util.concurrent.TimeUnit

@@ -35,7 +35,7 @@
             android:label="@string/title_activity_main">
 
         </activity>
-        <activity android:name=".view.login.LoginActivity">
+        <activity android:name=".view.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

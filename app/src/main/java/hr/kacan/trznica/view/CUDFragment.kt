@@ -28,7 +28,7 @@ import hr.kacan.trznica.App
 import hr.kacan.trznica.R
 import hr.kacan.trznica.conf.Constants
 import hr.kacan.trznica.models.TipProizvoda
-import hr.kacan.trznica.utils.FileHelper
+import hr.kacan.trznica.utils.PathUtil
 import hr.kacan.trznica.viewmodel.PonudaViewModel
 import id.zelory.compressor.Compressor
 import okhttp3.MediaType
@@ -314,7 +314,7 @@ open class CUDFragment : Fragment() {
             slikaURI = intent?.data!!
             var tmpFile: File? = null
             if (intent.data != null) {
-                val fileHelper = FileHelper(activity as AppCompatActivity)
+                val fileHelper = PathUtil(activity as AppCompatActivity)
                 tmpFile = File(fileHelper.getPath(slikaURI!!))
                 photoPath = tmpFile.absolutePath
             }

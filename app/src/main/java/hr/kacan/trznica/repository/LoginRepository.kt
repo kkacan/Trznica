@@ -1,9 +1,9 @@
 package hr.kacan.trznica.repository
 
 import androidx.lifecycle.MutableLiveData
-import hr.kacan.trznica.data.LoginDataSource
-import hr.kacan.trznica.data.Result
 import hr.kacan.trznica.models.Korisnik
+import hr.kacan.trznica.view.login.LoginDataSource
+import hr.kacan.trznica.view.login.Result
 
 /**
  * Class that requests authentication and user information from the remote data source and

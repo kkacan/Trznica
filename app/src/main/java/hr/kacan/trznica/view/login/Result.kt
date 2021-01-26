@@ -1,4 +1,4 @@
-package hr.kacan.trznica.data
+package hr.kacan.trznica.view.login
 
 import hr.kacan.trznica.models.Korisnik
 

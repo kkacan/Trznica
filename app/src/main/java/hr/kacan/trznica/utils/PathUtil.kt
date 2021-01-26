@@ -18,7 +18,7 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 
-class FileHelper(var context: Context?) {
+class PathUtil(var context: Context?) {
 
     private var contentUri: Uri? = null
 
@@ -26,137 +26,114 @@ class FileHelper(var context: Context?) {
     @SuppressLint("NewApi")
     fun getPath(uri: Uri): String? {
 
-        val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
         var selection: String? = null
         var selectionArgs: Array<String>? = null
 
-        if (isKitKat) {
-
-            if (isExternalStorageDocument(uri)) {
-                val docId = DocumentsContract.getDocumentId(uri)
-                val split = docId.split(":").toTypedArray()
-                val type = split[0]
-                val fullPath = getPathFromExtSD(split)
-                return if (fullPath !== "") {
-                    fullPath
-                } else {
-                    null
-                }
+        if (isExternalStorageDocument(uri)) {
+            val docId = DocumentsContract.getDocumentId(uri)
+            val split = docId.split(":").toTypedArray()
+            val type = split[0]
+            val fullPath = getPathFromExtSD(split)
+            return if (fullPath !== "") {
+                fullPath
+            } else {
+                null
             }
+        }
 
-            if (isDownloadsDocument(uri)) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    val id: String
-                    var cursor: Cursor? = null
-                    try {
-                        cursor = context!!.contentResolver.query(uri, arrayOf(MediaStore.MediaColumns.DISPLAY_NAME), null, null, null)
-                        if (cursor != null && cursor.moveToFirst()) {
-                            val fileName = cursor.getString(0)
-                            val path = Environment.getExternalStorageDirectory().toString() + "/Download/" + fileName
-                            if (!TextUtils.isEmpty(path)) {
-                                return path
-                            }
-                        }
-                    } finally {
-                        cursor?.close()
-                    }
-                    id = DocumentsContract.getDocumentId(uri)
-                    if (!TextUtils.isEmpty(id)) {
-                        if (id.startsWith("raw:")) {
-                            return id.replaceFirst("raw:".toRegex(), "")
-                        }
-                        val contentUriPrefixesToTry = arrayOf(
-                                "content://downloads/public_downloads",
-                                "content://downloads/my_downloads"
-                        )
-                        for (contentUriPrefix in contentUriPrefixesToTry) {
-                            return try {
-                                val contentUri = ContentUris.withAppendedId(Uri.parse(contentUriPrefix), java.lang.Long.valueOf(id))
-                                getDataColumn(context, contentUri, null, null)
-                            } catch (e: NumberFormatException) {
-
-                                uri.path!!.replaceFirst("^/document/raw:".toRegex(), "").replaceFirst("^raw:".toRegex(), "")
-                            }
+        if (isDownloadsDocument(uri)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val id: String
+                var cursor: Cursor? = null
+                try {
+                    cursor = context!!.contentResolver.query(uri, arrayOf(MediaStore.MediaColumns.DISPLAY_NAME), null, null, null)
+                    if (cursor != null && cursor.moveToFirst()) {
+                        val fileName = cursor.getString(0)
+                        val path = Environment.getExternalStorageDirectory().toString() + "/Download/" + fileName
+                        if (!TextUtils.isEmpty(path)) {
+                            return path
                         }
                     }
-                } else {
-                    val id = DocumentsContract.getDocumentId(uri)
+                } finally {
+                    cursor?.close()
+                }
+                id = DocumentsContract.getDocumentId(uri)
+                if (!TextUtils.isEmpty(id)) {
                     if (id.startsWith("raw:")) {
                         return id.replaceFirst("raw:".toRegex(), "")
                     }
-                    try {
-                        contentUri = ContentUris.withAppendedId(
-                                Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(id))
-                    } catch (e: NumberFormatException) {
-                        e.printStackTrace()
+                    val contentUriPrefixesToTry = arrayOf(
+                            "content://downloads/public_downloads",
+                            "content://downloads/my_downloads"
+                    )
+                    for (contentUriPrefix in contentUriPrefixesToTry) {
+                        return try {
+                            val contentUri = ContentUris.withAppendedId(Uri.parse(contentUriPrefix), java.lang.Long.valueOf(id))
+                            getDataColumn(context, contentUri, null, null)
+                        } catch (e: NumberFormatException) {
+
+                            uri.path!!.replaceFirst("^/document/raw:".toRegex(), "").replaceFirst("^raw:".toRegex(), "")
+                        }
                     }
-                    if (contentUri != null) {
-                        return getDataColumn(context, contentUri, null, null)
-                    }
+                }
+            } else {
+                val id = DocumentsContract.getDocumentId(uri)
+                if (id.startsWith("raw:")) {
+                    return id.replaceFirst("raw:".toRegex(), "")
+                }
+                try {
+                    contentUri = ContentUris.withAppendedId(
+                            Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(id))
+                } catch (e: NumberFormatException) {
+                    e.printStackTrace()
+                }
+                if (contentUri != null) {
+                    return getDataColumn(context, contentUri, null, null)
                 }
             }
+        }
 
-            if (isMediaDocument(uri)) {
-                val docId = DocumentsContract.getDocumentId(uri)
-                val split = docId.split(":").toTypedArray()
-                val type = split[0]
-                var contentUri: Uri? = null
-                if ("image" == type) {
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                } else if ("video" == type) {
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-                } else if ("audio" == type) {
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-                }
-                selection = "_id=?"
-                selectionArgs = arrayOf(split[1])
-                return getDataColumn(context, contentUri, selection,
-                        selectionArgs)
+        if (isMediaDocument(uri)) {
+            val docId = DocumentsContract.getDocumentId(uri)
+            val split = docId.split(":").toTypedArray()
+            val type = split[0]
+            var contentUri: Uri? = null
+            if ("image" == type) {
+                contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            } else if ("video" == type) {
+                contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+            } else if ("audio" == type) {
+                contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+            }
+            selection = "_id=?"
+            selectionArgs = arrayOf(split[1])
+            return getDataColumn(context, contentUri, selection,
+                    selectionArgs)
+        }
+        if (isGoogleDriveUri(uri)) {
+            return getDriveFilePath(uri)
+        }
+        if (isWhatsAppFile(uri)) {
+            return getFilePathForWhatsApp(uri)
+        }
+        if ("content".equals(uri.scheme, ignoreCase = true)) {
+            if (isGooglePhotosUri(uri)) {
+                return uri.lastPathSegment
             }
             if (isGoogleDriveUri(uri)) {
                 return getDriveFilePath(uri)
             }
-            if (isWhatsAppFile(uri)) {
-                return getFilePathForWhatsApp(uri)
-            }
-            if ("content".equals(uri.scheme, ignoreCase = true)) {
-                if (isGooglePhotosUri(uri)) {
-                    return uri.lastPathSegment
-                }
-                if (isGoogleDriveUri(uri)) {
-                    return getDriveFilePath(uri)
-                }
-                return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 
-                    getRealPathFromURI(context, uri)
-                } else {
-                    getDataColumn(context, uri, null, null)
-                }
-            }
-            if ("file".equals(uri.scheme, ignoreCase = true)) {
-                return uri.path
-            }
-        } else {
-            if (isWhatsAppFile(uri)) {
-                return getFilePathForWhatsApp(uri)
-            }
-            if ("content".equals(uri.scheme, ignoreCase = true)) {
-                val projection = arrayOf(
-                        MediaStore.Images.Media.DATA
-                )
-                var cursor: Cursor? = null
-                try {
-                    cursor = context!!.contentResolver
-                            .query(uri, projection, selection, selectionArgs, null)
-                    val column_index = cursor!!.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-                    if (cursor.moveToFirst()) {
-                        return cursor.getString(column_index)
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+                getRealPathFromURI(context, uri)
+            } else {
+                getDataColumn(context, uri, null, null)
             }
         }
+        if ("file".equals(uri.scheme, ignoreCase = true)) {
+            return uri.path
+        }
+
         return null
     }
 
