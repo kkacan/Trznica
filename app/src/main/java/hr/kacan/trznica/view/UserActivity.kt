@@ -5,17 +5,19 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.*
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import dagger.hilt.android.AndroidEntryPoint
 import hr.kacan.trznica.App
 import hr.kacan.trznica.R
 import hr.kacan.trznica.conf.Constants
 import hr.kacan.trznica.models.Korisnik
-import hr.kacan.trznica.view.login.LoginViewModelFactory
-import hr.kacan.trznica.viewmodel.LoginViewModel
-import hr.kacan.trznica.viewmodel.RegisterViewModel
+import hr.kacan.trznica.view.login.LoginViewModel
+import hr.kacan.trznica.viewmodel.KorisnikViewModel
 
+@AndroidEntryPoint
 class UserActivity : AppCompatActivity() {
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var loadingProgressBar: ProgressBar
@@ -26,13 +28,12 @@ class UserActivity : AppCompatActivity() {
     private lateinit var telEditText: EditText
     private lateinit var saveButton: Button
     private lateinit var cancelButton: Button
-    private lateinit var model: RegisterViewModel
+    private val model: KorisnikViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user)
-        model = ViewModelProvider(this).get(RegisterViewModel::class.java)
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory()).get(LoginViewModel::class.java)
+        loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         nameEditText = findViewById(R.id.ime)
         surnameEditText = findViewById(R.id.prezime)
         townEditText = findViewById(R.id.grad)
@@ -71,8 +72,10 @@ class UserActivity : AppCompatActivity() {
         saveButton.setOnClickListener {
             loadingProgressBar.visibility = View.VISIBLE
             val korisnik = Korisnik(0, nameEditText.text.toString(), surnameEditText.text.toString(), townEditText.text.toString(), addressEditText.text.toString(), telEditText.text.toString(), App.KORISNIK.email, "")
-            model.editKorisnik(korisnik).observe(this@UserActivity, Observer { responseKorisnik ->
+            model.editKorisnik(korisnik)
+            model.responseKorisnik.observe(this@UserActivity, { responseKorisnik ->
                 if (responseKorisnik.response == Constants.RESPONSE_SUCCESS) {
+                    App.KORISNIK = responseKorisnik.korisnik
                     Toast.makeText(applicationContext, getString(R.string.update_success), Toast.LENGTH_LONG).show()
                     finish()
                 } else if (responseKorisnik.response == Constants.RESPONSE_FAIL) {

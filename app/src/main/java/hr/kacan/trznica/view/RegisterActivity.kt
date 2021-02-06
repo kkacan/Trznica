@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.widget.*
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -21,16 +22,16 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.rilixtech.widget.countrycodepicker.CountryCodePicker
+import dagger.hilt.android.AndroidEntryPoint
 import hr.kacan.trznica.R
 import hr.kacan.trznica.conf.Constants
 import hr.kacan.trznica.models.Korisnik
-import hr.kacan.trznica.view.login.LoginViewModelFactory
-import hr.kacan.trznica.viewmodel.LoginViewModel
-import hr.kacan.trznica.viewmodel.RegisterViewModel
+import hr.kacan.trznica.view.login.LoginViewModel
+import hr.kacan.trznica.viewmodel.KorisnikViewModel
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-
+@AndroidEntryPoint
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
@@ -45,7 +46,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var telEditText: EditText
     private lateinit var ccp: CountryCodePicker
     private lateinit var registerButton: Button
-    private lateinit var model: RegisterViewModel
+    private val model: KorisnikViewModel by viewModels()
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     private lateinit var verId: String
@@ -58,8 +59,7 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        model = ViewModelProvider(this).get(RegisterViewModel::class.java)
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory()).get(LoginViewModel::class.java)
+        loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         usernameEditText = findViewById(R.id.username)
         passwordEditText = findViewById(R.id.password)
         password2EditText = findViewById(R.id.password2)
@@ -94,9 +94,7 @@ class RegisterActivity : AppCompatActivity() {
         val afterTextChangedListener: TextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
                 loginViewModel.loginDataChanged(usernameEditText.text.toString(), passwordEditText.text.toString())
@@ -200,7 +198,8 @@ class RegisterActivity : AppCompatActivity() {
     private fun registerUser() {
         loadingProgressBar.visibility = View.VISIBLE
         val korisnik = Korisnik(0, nameEditText.text.toString().trim(), surnameEditText.text.toString().trim(), townEditText.text.toString().trim(), addressEditText.text.toString().trim(), ccp.fullNumberWithPlus.trim(), usernameEditText.text.toString().trim(), passwordEditText.text.toString().trim())
-        model.registerKorisnik(korisnik).observe(this@RegisterActivity, Observer { responseKorisnik ->
+        model.registerKorisnik(korisnik)
+        model.responseKorisnik.observe(this@RegisterActivity, Observer { responseKorisnik ->
             if (responseKorisnik.response == Constants.RESPONSE_SUCCESS) {
                 Toast.makeText(applicationContext, getString(R.string.register_success), Toast.LENGTH_LONG).show()
                 val intent = Intent(this@RegisterActivity, LoginActivity::class.java)

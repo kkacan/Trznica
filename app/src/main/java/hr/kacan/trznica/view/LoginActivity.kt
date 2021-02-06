@@ -7,20 +7,21 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.*
+import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import dagger.hilt.android.AndroidEntryPoint
+import hr.kacan.trznica.App
 import hr.kacan.trznica.R
 import hr.kacan.trznica.conf.Constants
 import hr.kacan.trznica.models.Korisnik
-import hr.kacan.trznica.view.login.LoggedInUser
-import hr.kacan.trznica.view.login.LoginResult
-import hr.kacan.trznica.view.login.LoginViewModelFactory
-import hr.kacan.trznica.view.login.Result
-import hr.kacan.trznica.viewmodel.LoginViewModel
+import hr.kacan.trznica.models.ResponseKorisnik
+import hr.kacan.trznica.view.login.LoginViewModel
+import hr.kacan.trznica.viewmodel.KorisnikViewModel
 
-
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var loadingProgressBar: ProgressBar
@@ -28,10 +29,12 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var passwordEditText: EditText
     private lateinit var loginButton: Button
     private lateinit var registerButton: Button
+    private val model: KorisnikViewModel by viewModels()
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory()).get(LoginViewModel::class.java)
+        loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         usernameEditText = findViewById(R.id.username)
         passwordEditText = findViewById(R.id.password)
         passwordEditText.setText("lozinka")
@@ -39,22 +42,24 @@ class LoginActivity : AppCompatActivity() {
         registerButton = findViewById(R.id.register)
         loadingProgressBar = findViewById(R.id.loading)
 
-        loginViewModel.getLoginResult().observe(this, Observer { loginResult ->
-            if (loginResult == null) {
+        loginViewModel.getLoginFormState().observe(this, Observer { loginFormState ->
+            if (loginFormState == null) {
                 return@Observer
             }
-            loadingProgressBar.visibility = View.GONE
+            //loginButton.isEnabled = loginFormState.isDataValid
 
-            if (loginResult.error != 0) {
-                showLoginFailed(loginResult.error)
+            if (loginFormState.usernameError != 0) {
+                usernameEditText.error = getString(loginFormState.usernameError)
+            } else {
+                usernameEditText.error = null
             }
-            if (loginResult.success.displayName != "") {
-                updateUiWithUser(loginResult.success)
+            if (loginFormState.passwordError != 0) {
+                passwordEditText.error = getString(loginFormState.passwordError)
+            } else {
+                passwordEditText.error = null
             }
-
-            setResult(RESULT_OK)
-
         })
+
         val afterTextChangedListener: TextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // ignore
@@ -73,57 +78,25 @@ class LoginActivity : AppCompatActivity() {
         passwordEditText.addTextChangedListener(afterTextChangedListener)
         passwordEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                loginViewModel.login(usernameEditText.text.toString(), passwordEditText.text.toString())
-                        .observe(this@LoginActivity, Observer { result ->
-                            if (result is Result.Success<*>) {
-                                val data = (result as Result.Success<*>).getData()
-                                loginViewModel.getLoginResult().setValue(LoginResult(LoggedInUser(data!!.ime), 0))
-                            } else {
-                                when ((result as Result.Error).getError()?.message.toString()) {
-                                    Constants.RESPONSE_FAIL_PWD ->
-                                        loginViewModel.getLoginResult().setValue(LoginResult(LoggedInUser(""), R.string.login_failed_pwd))
-                                    Constants.RESPONSE_FAIL_USN ->
-                                        loginViewModel.getLoginResult().setValue(LoginResult(LoggedInUser(""), R.string.login_failed_usn))
-                                    else ->
-                                        loginViewModel.getLoginResult().setValue(LoginResult(LoggedInUser(""), R.string.login_failed))
-                                }
-                            }
-                        })
+                model.loginKorisnik(Korisnik(usernameEditText.text.toString(), passwordEditText.text.toString()))
+                loginObserver()
             }
             false
         }
         loginButton.setOnClickListener {
             loadingProgressBar.visibility = View.VISIBLE
-
-
-            loginViewModel.login(usernameEditText.text.toString(), passwordEditText.text.toString())
-                    .observe(this@LoginActivity, Observer { result ->
-                        if (result is Result.Success<*>) {
-                            val data = (result as Result.Success<*>).getData()
-                            loginViewModel.getLoginResult().value = LoginResult(LoggedInUser(data!!.ime), 0)
-                            saveUserData(data)
-                        } else {
-                            when ((result as Result.Error).getError()?.message.toString()) {
-                                Constants.RESPONSE_FAIL_PWD ->
-                                    loginViewModel.getLoginResult().setValue(LoginResult(LoggedInUser(""), R.string.login_failed_pwd))
-                                Constants.RESPONSE_FAIL_USN ->
-                                    loginViewModel.getLoginResult().setValue(LoginResult(LoggedInUser(""), R.string.login_failed_usn))
-                                else ->
-                                    loginViewModel.getLoginResult().setValue(LoginResult(LoggedInUser(""), R.string.login_failed))
-                            }
-                        }
-                    })
+            model.loginKorisnik(Korisnik(usernameEditText.text.toString(), passwordEditText.text.toString()))
+            loginObserver()
         }
         registerButton.setOnClickListener {
             val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
             startActivity(intent)
-
         }
         getUserData()
     }
 
-    private fun updateUiWithUser(model: LoggedInUser?) {
-        val welcome = getString(R.string.welcome) + (model?.displayName)
+    private fun updateUiWithUser(responseKorisnik: ResponseKorisnik) {
+        val welcome = getString(R.string.welcome) + (responseKorisnik.korisnik.ime)
         Toast.makeText(applicationContext, welcome, Toast.LENGTH_LONG).show()
         val intent = Intent(this@LoginActivity, MenuActivity::class.java)
         startActivity(intent)
@@ -136,10 +109,10 @@ class LoginActivity : AppCompatActivity() {
         usernameEditText.requestFocus()
     }
 
-    private fun saveUserData(data: Korisnik) {
+    private fun saveUserData(korisnik: Korisnik) {
         val prefs = getSharedPreferences("UserData", 0)
         val edit = prefs.edit()
-        edit.putString("username", data.email)
+        edit.putString("username", korisnik.email)
         edit.apply()
     }
 
@@ -147,5 +120,21 @@ class LoginActivity : AppCompatActivity() {
         val prefs = getSharedPreferences("UserData", 0)
         val userName = prefs.getString("username", "")
         if (userName?.isNotEmpty() == true) usernameEditText.setText(userName)
+    }
+
+    private fun loginObserver(){
+        model.responseKorisnik.observe(this@LoginActivity, { responseKorisnik ->
+            loadingProgressBar.visibility = View.GONE
+            if (responseKorisnik.response == Constants.RESPONSE_FAIL_USN) {
+                showLoginFailed(R.string.login_failed_usn)
+            } else if (responseKorisnik.response == Constants.RESPONSE_FAIL_PWD) {
+                showLoginFailed(R.string.login_failed_pwd)
+            }
+            if (responseKorisnik.response == Constants.RESPONSE_SUCCESS) {
+                App.KORISNIK = responseKorisnik.korisnik
+                updateUiWithUser(responseKorisnik)
+                saveUserData(responseKorisnik.korisnik)
+            }
+        })
     }
 }

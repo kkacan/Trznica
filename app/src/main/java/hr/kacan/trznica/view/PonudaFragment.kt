@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import dagger.hilt.android.AndroidEntryPoint
 import hr.kacan.trznica.App
 import hr.kacan.trznica.R
 import hr.kacan.trznica.adapters.PonudaAdapter
@@ -19,6 +20,7 @@ import hr.kacan.trznica.interfaces.PonudaClickListener
 import hr.kacan.trznica.models.Ponuda
 import hr.kacan.trznica.viewmodel.PonudaViewModel
 
+@AndroidEntryPoint
 class PonudaFragment : Fragment(),PonudaClickListener {
 
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
@@ -26,8 +28,7 @@ class PonudaFragment : Fragment(),PonudaClickListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var noData: TextView
     private lateinit var ponudaAdapter: PonudaAdapter
-    private lateinit var model: PonudaViewModel
-
+    private val model: PonudaViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -39,10 +40,9 @@ class PonudaFragment : Fragment(),PonudaClickListener {
         noData = view.findViewById(R.id.nodata)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         fab.setOnClickListener {
-            model.setPonuda(Ponuda(0.0, "", "", "/", App.TIP_PROIZVODA_ID.toInt(), App.KORISNIK.id))
+            App.PONUDA = (Ponuda(0.0, "", "", "/", App.TIP_PROIZVODA_ID.toInt(), App.KORISNIK.id))
             (activity as MainActivity).cud()
         }
-        model = (activity as MainActivity).getModel()
         setList()
         setSwipe()
         refreshData()
@@ -51,7 +51,9 @@ class PonudaFragment : Fragment(),PonudaClickListener {
     }
 
     private fun refreshData() {
-        model.getPonude(App.TIP_PROIZVODA_ID, (activity as MainActivity).search).observe(viewLifecycleOwner, Observer { ponude ->
+        model.getPonude(App.TIP_PROIZVODA_ID, (activity as MainActivity).search)
+
+        model.ponude.observe(viewLifecycleOwner, { ponude ->
             swipeRefreshLayout.isRefreshing = false
             ponude.sortByDescending { it.id }
             (recyclerView.adapter as PonudaAdapter).setData(ponude)
@@ -82,7 +84,7 @@ class PonudaFragment : Fragment(),PonudaClickListener {
     }
 
     override fun onItemClick(view: View, position: Int) {
-        model.setPonuda(ponudaAdapter.getItem(position))
+        App.PONUDA = (ponudaAdapter.getItem(position))
         (activity as MainActivity).cud()
     }
 

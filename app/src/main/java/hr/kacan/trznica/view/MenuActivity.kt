@@ -3,12 +3,12 @@ package hr.kacan.trznica.view
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import hr.kacan.trznica.App
 import hr.kacan.trznica.R
 import hr.kacan.trznica.adapters.MenuAdapter
@@ -18,20 +18,20 @@ import hr.kacan.trznica.utils.SpacingItemDecoration
 import hr.kacan.trznica.utils.Tools
 import hr.kacan.trznica.viewmodel.TipViewModel
 
-
+@AndroidEntryPoint
 class MenuActivity() : AppCompatActivity(), MenuAdapter.OnItemClickListener {
 
     private lateinit var parent_view: View
     private lateinit var recyclerView: RecyclerView
     private lateinit var mAdapter: MenuAdapter
-    private lateinit var model: TipViewModel
+    private val model: TipViewModel by viewModels()
     private lateinit var searchView: SearchView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
         parent_view = findViewById(R.id.parent_view)
-        model = ViewModelProvider(this@MenuActivity).get(TipViewModel::class.java)
         initComponent()
     }
 
@@ -67,7 +67,8 @@ class MenuActivity() : AppCompatActivity(), MenuAdapter.OnItemClickListener {
     }
 
     private fun setItems() {
-        model.getTipProizvodaData().observe(this, Observer { items ->
+        model.getTipProizvodaData()
+        model.tipProizvoda.observe(this, { items ->
             if (items != null) {
                 App.TIP_PROIZVODA_LIST = items
                 val tipProizvodaList: MutableList<TipProizvoda> = items.toMutableList()
@@ -101,7 +102,6 @@ class MenuActivity() : AppCompatActivity(), MenuAdapter.OnItemClickListener {
             override fun onQueryTextChange(s: String?): Boolean {
                 return true
             }
-
         })
     }
 }

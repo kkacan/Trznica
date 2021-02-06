@@ -1,13 +1,13 @@
 package hr.kacan.trznica.conf
 
 /**
- * Klasa koja sadrži konstante
+ * Klasa konstanti
  *
  * @author Kristijan Kačan
- * @since prosinac, 2019.
+ * @since prosinac, 2020.
  */
 object Constants {
-    const val BASE_URL: String = "http://ec2-18-185-93-51.eu-central-1.compute.amazonaws.com/"
+    private const val BASE_URL: String = "http://ec2-18-185-93-51.eu-central-1.compute.amazonaws.com/"
     const val API_BASE_URL: String = "http://ec2-18-185-93-51.eu-central-1.compute.amazonaws.com/api/v1/"
     //const val BASE_URL: String = "http://192.168.1.100:5000/"
     //const val API_BASE_URL: String =  "http://192.168.1.100:5000/api/v1/"

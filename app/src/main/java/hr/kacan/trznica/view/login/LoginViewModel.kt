@@ -1,31 +1,17 @@
-package hr.kacan.trznica.viewmodel
+package hr.kacan.trznica.view.login
 
 import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import hr.kacan.trznica.R
-import hr.kacan.trznica.models.Korisnik
-import hr.kacan.trznica.repository.LoginRepository
-import hr.kacan.trznica.view.login.LoginFormState
-import hr.kacan.trznica.view.login.LoginResult
-import hr.kacan.trznica.view.login.Result
 
-class LoginViewModel internal constructor(private val loginRepository: LoginRepository?) : ViewModel() {
+class LoginViewModel internal constructor() : ViewModel() {
 
     private val loginFormState: MutableLiveData<LoginFormState> = MutableLiveData()
-    private val loginResult: MutableLiveData<LoginResult> = MutableLiveData()
 
     fun getLoginFormState(): LiveData<LoginFormState> {
         return loginFormState
-    }
-
-    fun getLoginResult(): MutableLiveData<LoginResult> {
-        return loginResult
-    }
-
-    fun login(username: String, password: String): LiveData<Result<Korisnik>> {
-        return loginRepository!!.login(username, password)
     }
 
     fun loginDataChanged(username: String?, password: String?) {

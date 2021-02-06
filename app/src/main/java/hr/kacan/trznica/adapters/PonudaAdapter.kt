@@ -64,5 +64,4 @@ class PonudaAdapter(private val context: Context, listener: PonudaClickListener)
 
     }
 
-
 }

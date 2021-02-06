@@ -26,13 +26,13 @@ class PathUtil(var context: Context?) {
     @SuppressLint("NewApi")
     fun getPath(uri: Uri): String? {
 
-        var selection: String? = null
-        var selectionArgs: Array<String>? = null
+        var selection: String?
+        var selectionArgs: Array<String>?
 
         if (isExternalStorageDocument(uri)) {
             val docId = DocumentsContract.getDocumentId(uri)
             val split = docId.split(":").toTypedArray()
-            val type = split[0]
+
             val fullPath = getPathFromExtSD(split)
             return if (fullPath !== "") {
                 fullPath
@@ -125,7 +125,7 @@ class PathUtil(var context: Context?) {
             }
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 
-                getRealPathFromURI(context, uri)
+                getRealPathFromURI(uri)
             } else {
                 getDataColumn(context, uri, null, null)
             }
@@ -137,7 +137,7 @@ class PathUtil(var context: Context?) {
         return null
     }
 
-    private fun getRealPathFromURI(context: Context?, uri: Uri): String? {
+    private fun getRealPathFromURI(uri: Uri): String? {
         val file = File(uri.path)
         var path: String? = ""
 
@@ -185,7 +185,7 @@ class PathUtil(var context: Context?) {
         val sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE)
         returnCursor.moveToFirst()
         val name = returnCursor.getString(nameIndex)
-        val size = returnCursor.getLong(sizeIndex).toString()
+
         val file = File(context!!.cacheDir, name)
         try {
             val inputStream = context!!.contentResolver.openInputStream(uri)
@@ -219,7 +219,7 @@ class PathUtil(var context: Context?) {
         val sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE)
         returnCursor.moveToFirst()
         val name = returnCursor.getString(nameIndex)
-        val size = returnCursor.getLong(sizeIndex).toString()
+
         val output: File
         output = if (newDirName != "") {
             val dir = File(context!!.filesDir.toString() + "/" + newDirName)
@@ -330,7 +330,7 @@ class PathUtil(var context: Context?) {
         val sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE)
         returnCursor.moveToFirst()
         val name = returnCursor.getString(nameIndex)
-        val size = returnCursor.getLong(sizeIndex).toString()
+
         val file = File(context.filesDir, name)
         try {
             val inputStream = context.contentResolver.openInputStream(uri)

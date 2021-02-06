@@ -21,9 +21,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.fragment.app.viewModels
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
+import dagger.hilt.android.AndroidEntryPoint
 import hr.kacan.trznica.App
 import hr.kacan.trznica.R
 import hr.kacan.trznica.conf.Constants
@@ -39,12 +40,13 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
+@AndroidEntryPoint
 open class CUDFragment : Fragment() {
 
     private lateinit var photoPath: String
     private var slika: File? = null
     private var slikaURI: Uri? = null
-    private lateinit var model: PonudaViewModel
+    private val model: PonudaViewModel by viewModels()
     private lateinit var tipProizvodaSpinner: Spinner
     private lateinit var nazivProizvoda: EditText
     private lateinit var cijenaProizvoda: EditText
@@ -85,7 +87,7 @@ open class CUDFragment : Fragment() {
         btnObrisi = view.findViewById(R.id.delete)
         loadingProgressBar = view.findViewById(R.id.loading)
         btnKontakt = view.findViewById(R.id.kontakt)
-        model = (activity as MainActivity).getModel()
+
         view.isFocusableInTouchMode = true
         view.requestFocus()
         view.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
@@ -99,7 +101,7 @@ open class CUDFragment : Fragment() {
         })
 
         setView()
-        if (model.getPonuda().naziv.isEmpty()) {
+        if (App.PONUDA.naziv.isEmpty()) {
             setNewPonuda()
         }
         return view
@@ -109,14 +111,14 @@ open class CUDFragment : Fragment() {
 
         tipProizvodaSpinner.adapter = ArrayAdapter(activity as AppCompatActivity, android.R.layout.simple_list_item_1, App.TIP_PROIZVODA_LIST)
         Picasso.get()
-                .load(model.getPonuda().slika)
+                .load(App.PONUDA.slika)
                 .error(R.drawable.no_img)
                 .into(slikaProizvoda)
-        labelNaziv.text = model.getPonuda().naziv
-        labelCijena.text = String.format("%.2f", model.getPonuda().cijena) + getString(R.string.kuna)
-        labelGrad.text = model.getPonuda().grad
-        labelTel.text = model.getPonuda().tel
-        labelOpis.text = model.getPonuda().opis
+        labelNaziv.text = App.PONUDA.naziv
+        labelCijena.text = String.format("%.2f", App.PONUDA.cijena) + getString(R.string.kuna)
+        labelGrad.text = App.PONUDA.grad
+        labelTel.text = App.PONUDA.tel
+        labelOpis.text = App.PONUDA.opis
         tipProizvodaSpinner.visibility = View.GONE
         nazivProizvoda.visibility = View.GONE
         cijenaProizvoda.visibility = View.GONE
@@ -127,7 +129,7 @@ open class CUDFragment : Fragment() {
         }
         fabSave.setOnClickListener { newPonuda() }
         btnObrisi.setOnClickListener { delPonuda() }
-        if (!App.KORISNIK.email.equals(model.getPonuda().email, ignoreCase = true)) {
+        if (!App.KORISNIK.email.equals(App.PONUDA.email, ignoreCase = true)) {
             fabEdit.visibility = View.GONE
             btnKontakt.visibility = View.VISIBLE
 
@@ -141,18 +143,16 @@ open class CUDFragment : Fragment() {
         }
     }
 
-
-
     private fun setEditPonuda() {
         setNewPonuda()
         var pos = 0
         for (i in App.TIP_PROIZVODA_LIST.indices) {
-            if (App.TIP_PROIZVODA_LIST[i].id  == model.getPonuda().tipProizvoda) pos = i
+            if (App.TIP_PROIZVODA_LIST[i].id  == App.PONUDA.tipProizvoda) pos = i
         }
         tipProizvodaSpinner.setSelection(pos)
-        nazivProizvoda.setText(model.getPonuda().naziv)
-        cijenaProizvoda.setText(model.getPonuda().cijena.toString())
-        opisProizvoda.setText(model.getPonuda().opis)
+        nazivProizvoda.setText(App.PONUDA.naziv)
+        cijenaProizvoda.setText(App.PONUDA.cijena.toString())
+        opisProizvoda.setText(App.PONUDA.opis)
     }
 
     private fun setNewPonuda() {
@@ -168,9 +168,9 @@ open class CUDFragment : Fragment() {
         nazivProizvoda.visibility = View.VISIBLE
         cijenaProizvoda.visibility = View.VISIBLE
         opisProizvoda.visibility = View.VISIBLE
-        if (model.getPonuda().naziv.isNotEmpty()) btnObrisi.visibility = View.VISIBLE
+        if (App.PONUDA.naziv.isNotEmpty()) btnObrisi.visibility = View.VISIBLE
         Picasso.get()
-                .load(model.getPonuda().slika)
+                .load(App.PONUDA.slika)
                 .error(R.drawable.take_photo)
                 .into(slikaProizvoda)
         slikaProizvoda.setOnClickListener { photoDialog() }
@@ -179,7 +179,7 @@ open class CUDFragment : Fragment() {
 
         var pos = 0
         for (i in App.TIP_PROIZVODA_LIST.indices) {
-            if (App.TIP_PROIZVODA_LIST[i].id  == model.getPonuda().tipProizvoda) pos = i
+            if (App.TIP_PROIZVODA_LIST[i].id  == App.PONUDA.tipProizvoda) pos = i
         }
         tipProizvodaSpinner.setSelection(pos)
     }
@@ -233,16 +233,16 @@ open class CUDFragment : Fragment() {
     }
 
     private fun newPonuda() {
-        model.getPonuda().tipProizvoda = (tipProizvodaSpinner.selectedItem as TipProizvoda).id
-        model.getPonuda().naziv = nazivProizvoda.text.toString()
-        model.getPonuda().cijena = cijenaProizvoda.text.toString().toDouble()
-        model.getPonuda().opis = opisProizvoda.text.toString()
-        model.getPonuda().email = App.KORISNIK.email
-        model.getPonuda().grad = App.KORISNIK.grad
-        model.getPonuda().ime = App.KORISNIK.ime
-        model.getPonuda().prezime = App.KORISNIK.prezime
-        model.getPonuda().tel = App.KORISNIK.tel
-        model.getPonuda().korisnikId = App.KORISNIK.id
+        App.PONUDA.tipProizvoda = (tipProizvodaSpinner.selectedItem as TipProizvoda).id
+        App.PONUDA.naziv = nazivProizvoda.text.toString()
+        App.PONUDA.cijena = cijenaProizvoda.text.toString().toDouble()
+        App.PONUDA.opis = opisProizvoda.text.toString()
+        App.PONUDA.email = App.KORISNIK.email
+        App.PONUDA.grad = App.KORISNIK.grad
+        App.PONUDA.ime = App.KORISNIK.ime
+        App.PONUDA.prezime = App.KORISNIK.prezime
+        App.PONUDA.tel = App.KORISNIK.tel
+        App.PONUDA.korisnikId = App.KORISNIK.id
         addPonuda()
     }
 
@@ -251,7 +251,8 @@ open class CUDFragment : Fragment() {
         alertDialog.setTitle(getString(R.string.del_message))
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok)
         ) { dialog, _ ->
-            model.delPonuda(model.getPonuda()).observe(viewLifecycleOwner, Observer { responsePonuda ->
+            model.delPonuda(App.PONUDA)
+            model.responsePonuda.observe(viewLifecycleOwner, { responsePonuda ->
                 if (responsePonuda.response == Constants.RESPONSE_SUCCESS) {
                     Toast.makeText(activity, getString(R.string.del_success_msg), Toast.LENGTH_LONG).show()
                     back()
@@ -340,7 +341,7 @@ open class CUDFragment : Fragment() {
                 .centerCrop()
                 .error(R.drawable.take_photo)
                 .into(slikaProizvoda)
-        model.getPonuda().slika = Constants.IMAGE_PREFIX + slika?.name
+        App.PONUDA.slika = Constants.IMAGE_PREFIX + slika?.name
     }
 
     @Throws(IOException::class)
@@ -365,13 +366,16 @@ open class CUDFragment : Fragment() {
             val requestFile = RequestBody.create(MediaType.parse((activity as AppCompatActivity).contentResolver.getType(slikaURI!!)), slika)
             image = MultipartBody.Part.createFormData("file", slika?.name, requestFile)
         }
-        model.addPonuda(image, model.getPonuda()).observe(viewLifecycleOwner, Observer { responsePonuda ->
+
+        model.addPonuda(image, App.PONUDA)
+
+        model.responsePonuda.observe(viewLifecycleOwner, { responsePonuda ->
             if (responsePonuda.response == Constants.RESPONSE_SUCCESS) {
                 Toast.makeText(activity, getString(R.string.add_success_msg), Toast.LENGTH_LONG).show()
             } else {
                 Toast.makeText(activity, getString(R.string.add_fail_msg), Toast.LENGTH_LONG).show()
             }
-            App.TIP_PROIZVODA_ID = model.getPonuda().tipProizvoda.toLong()
+            App.TIP_PROIZVODA_ID = App.PONUDA.tipProizvoda.toLong()
             loadingProgressBar.visibility = View.GONE
             App.TIP_PROIZVODA_NAZIV = (tipProizvodaSpinner.selectedItem as TipProizvoda).naziv
             back()
@@ -385,7 +389,6 @@ open class CUDFragment : Fragment() {
             if (permission != PackageManager.PERMISSION_GRANTED) {
                 if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     val builder = androidx.appcompat.app.AlertDialog.Builder((activity as AppCompatActivity))
-                    //builder.setMessage("Permission")
                     builder.setTitle(getString(R.string.perm_write))
                     builder.setPositiveButton(getString(R.string.ok)) { _, _ -> makeRequest() }
                     val dialog = builder.create()
@@ -428,7 +431,7 @@ open class CUDFragment : Fragment() {
         btnEmail.setOnClickListener {
             val intent = Intent(Intent.ACTION_SENDTO)
             intent.data = Uri.parse("mailto:")
-            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(model.getPonuda().email))
+            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(App.PONUDA.email))
             intent.putExtra(Intent.EXTRA_SUBJECT, "Upit za " + labelNaziv.text)
             if (intent.resolveActivity((activity as AppCompatActivity).packageManager) != null) {
                 startActivity(intent)

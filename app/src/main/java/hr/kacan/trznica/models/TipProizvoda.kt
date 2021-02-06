@@ -7,5 +7,4 @@ data class TipProizvoda(var id: Int, var naziv: String, var slika: String) : Ser
     override fun toString(): String {
         return naziv
     }
-
 }
